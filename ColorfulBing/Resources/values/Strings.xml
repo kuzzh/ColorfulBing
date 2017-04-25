@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <string name="ApplicationName">缤纷必应</string>
+  <string name="WaitDlgTitle">请稍后</string>
+  <string name="WaitDlgMsg">正在加载中...</string>
+  <string name="WaitDlgMsgSave">正在保存中...</string>
+  <string name="SaveToDisk">保存</string>
+  <string name="SetAsWallpaper">设置壁纸</string>
+</resources>

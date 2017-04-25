@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/logoLayout"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent">
+    <ImageView
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:id="@+id/imageView1"
+        android:scaleType="fitXY" />
+    <GridLayout
+        android:minWidth="25px"
+        android:minHeight="25px"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:id="@+id/gridLayout1"
+        android:orientation="horizontal"
+        android:background="#50000000"
+        android:rowCount="4"
+        android:columnCount="1">
+        <TextView
+            android:id="@+id/tvCopyRight"
+            android:textColor="#ffffff"
+            android:textStyle="bold" />
+        <TextView
+            android:id="@+id/tvDescription" 
+            android:textColor="#c6cccc"
+            />
+        <TextView
+            android:id="@+id/tvCalendar"
+            android:textColor="#ffffff"
+            />
+        <TextView
+            android:id="@+id/tvLocation"
+            android:textColor="#ffffff"
+            />
+    </GridLayout>
+</FrameLayout>
