@@ -48,7 +48,13 @@ namespace ColorfulBing
 			public const int bing = 2130837504;
 			
 			// aapt resource value: 0x7f020001
-			public const int Icon = 2130837505;
+			public const int calendar = 2130837505;
+			
+			// aapt resource value: 0x7f020002
+			public const int Icon = 2130837506;
+			
+			// aapt resource value: 0x7f020003
+			public const int location = 2130837507;
 			
 			static Drawable()
 			{
@@ -69,6 +75,9 @@ namespace ColorfulBing
 			// aapt resource value: 0x7f060001
 			public const int imageView1 = 2131099649;
 			
+			// aapt resource value: 0x7f060006
+			public const int ivLocation = 2131099654;
+			
 			// aapt resource value: 0x7f060000
 			public const int logoLayout = 2131099648;
 			
@@ -81,8 +90,8 @@ namespace ColorfulBing
 			// aapt resource value: 0x7f060004
 			public const int tvDescription = 2131099652;
 			
-			// aapt resource value: 0x7f060006
-			public const int tvLocation = 2131099654;
+			// aapt resource value: 0x7f060007
+			public const int tvLocation = 2131099655;
 			
 			static Id()
 			{

@@ -18,22 +18,28 @@
         android:orientation="horizontal"
         android:background="#50000000"
         android:rowCount="4"
-        android:columnCount="1">
+        android:columnCount="2">
         <TextView
             android:id="@+id/tvCopyRight"
+            android:layout_columnSpan="2"
             android:textColor="#ffffff"
             android:textStyle="bold" />
         <TextView
-            android:id="@+id/tvDescription" 
-            android:textColor="#c6cccc"
-            />
+            android:id="@+id/tvDescription"
+            android:layout_columnSpan="2"
+            android:textColor="#c6cccc" />
         <TextView
             android:id="@+id/tvCalendar"
-            android:textColor="#ffffff"
-            />
+            android:layout_columnSpan="2"
+            android:textColor="#ffffff" />
+        <ImageView
+            android:id="@+id/ivLocation"
+            android:visibility="invisible"
+            android:src="@drawable/location"
+            android:layout_column="0" />
         <TextView
             android:id="@+id/tvLocation"
-            android:textColor="#ffffff"
-            />
+            android:layout_column="1"
+            android:textColor="#ffffff" />
     </GridLayout>
 </FrameLayout>

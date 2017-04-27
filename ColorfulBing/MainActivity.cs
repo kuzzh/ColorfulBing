@@ -12,7 +12,6 @@ using System.Text.RegularExpressions;
 using Newtonsoft.Json;
 using System.Threading.Tasks;
 using System.Collections.Generic;
-using Plugin.FilePicker;
 using Android.Graphics.Drawables;
 using Android.Provider;
 
@@ -21,6 +20,7 @@ namespace ColorfulBing
     [Activity(Label = "@string/ApplicationName", MainLauncher = true, Icon = "@drawable/bing")]
     public class MainActivity : Activity {
         private ImageView mImageView;
+        private ImageView ivLocation;
         private BingData mBingData;
 
         protected override async void OnCreate(Bundle bundle) {
@@ -30,6 +30,7 @@ namespace ColorfulBing
             SetContentView(Resource.Layout.Main);
 
             mImageView = FindViewById<ImageView>(Resource.Id.imageView1);
+            ivLocation = FindViewById<ImageView>(Resource.Id.ivLocation);
 
             RegisterForContextMenu(mImageView);
 
@@ -72,6 +73,8 @@ namespace ColorfulBing
                 location += "，" + mBingData.Data.City;
             }
             tvLocation.Text = location;
+
+            ivLocation.Visibility = ViewStates.Visible;
         }
 
         public override void OnCreateContextMenu(IContextMenu menu, View v, IContextMenuContextMenuInfo menuInfo) {
@@ -90,34 +93,25 @@ namespace ColorfulBing
             base.OnContextItemSelected(item);
 
             var bitmap = ((BitmapDrawable)mImageView.Drawable).Bitmap;
+            var pd = new ProgressDialog(this);
+            pd.SetProgressStyle(ProgressDialogStyle.Spinner);
+            pd.SetTitle(Resources.GetString(Resource.String.WaitDlgTitle));
 
             switch (item.ItemId) {
                 case 0: // 保存至磁盘
-                    var title = Resources.GetString(Resource.String.WaitDlgTitle);
-                    var message = Resources.GetString(Resource.String.WaitDlgMsgSave);
-                    var pd = ProgressDialog.Show(this, title, message);
-
-                    //if (!Directory.Exists(Const.WallpaperDir)) {
-                    //    Directory.CreateDirectory(Const.WallpaperDir);
-                    //}
-                    //var filename = mBingData.Data.Hsh + ".png";
-                    //var filepath = System.IO.Path.Combine(Const.WallpaperDir, filename);
-                    //using (var fs = new FileStream(filepath, FileMode.Create, FileAccess.Write)) {
-                    //    bitmap.Compress(Bitmap.CompressFormat.Png, 100, fs);
-                    //}
+                    pd.SetMessage(Resources.GetString(Resource.String.WaitDlgMsgSave));
+                    pd.Show();
                     MediaStore.Images.Media.InsertImage(ContentResolver, bitmap, mBingData.Data.Title, mBingData.Data.Description);
                     pd.Dismiss();
 
                     Toast.MakeText(this, "图片已保存至图库", ToastLength.Long).Show();
-                    //Toast.MakeText(this, "图片已保存至 " + filepath, ToastLength.Long).Show();
 
                     return true;
                 case 1: // 设置为壁纸
-                    var pd2 = ProgressDialog.Show(this, "请稍后", "正在设置中...");
-                    var wallpaperManager = WallpaperManager.GetInstance(this);
-                    wallpaperManager.SetBitmap(bitmap);
-
-                    pd2.Dismiss();
+                    pd.SetMessage("正在设置壁纸...");
+                    pd.Show();
+                    WallpaperManager.GetInstance(this).SetBitmap(bitmap);
+                    pd.Dismiss();
 
                     Toast.MakeText(this, "壁纸设置成功", ToastLength.Long).Show();
 
