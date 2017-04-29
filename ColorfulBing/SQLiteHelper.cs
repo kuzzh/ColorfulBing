@@ -26,6 +26,17 @@ namespace ColorfulBing {
             }
         }
 
+        public static int GetCount() {
+            using (var conn = GetConnection()) {
+                using (var command = new SqliteCommand(conn)) {
+                    command.CommandType = System.Data.CommandType.Text;
+                    command.CommandText = String.Format("SELECT COUNT(*) FROM {0}", BDataTableName);
+                    var result = command.ExecuteScalar();
+                    return int.Parse(result.ToString());
+                }
+            }
+        }
+
         public static async Task<BData> GetBDataAsync(DateTime dt) {
             using (var conn = GetConnection()) {
                 using (var command = new SqliteCommand(conn)) {

@@ -108,11 +108,15 @@
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Xml" />
+    <Reference Include="Xamarin.Android.Support.v4, Version=1.0.0.0, Culture=neutral, PublicKeyToken=71f3e3261ac778b5, processorArchitecture=MSIL">
+      <HintPath>..\packages\Crosslight.Xamarin.Android.Support.v4.23.1.1\lib\MonoAndroid10\Xamarin.Android.Support.v4.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BitmapUtil.cs" />
     <Compile Include="Const.cs" />
     <Compile Include="DateUtil.cs" />
+    <Compile Include="ImagePagerAdapter .cs" />
     <Compile Include="Model\BData.cs" />
     <Compile Include="Model\JBData.cs" />
     <Compile Include="MainActivity.cs" />

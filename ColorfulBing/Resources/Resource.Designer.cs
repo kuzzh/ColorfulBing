@@ -72,9 +72,6 @@ namespace ColorfulBing
 			// aapt resource value: 0x7f060002
 			public const int gridLayout1 = 2131099650;
 			
-			// aapt resource value: 0x7f060001
-			public const int imageView1 = 2131099649;
-			
 			// aapt resource value: 0x7f060005
 			public const int ivLocation = 2131099653;
 			
@@ -92,6 +89,9 @@ namespace ColorfulBing
 			
 			// aapt resource value: 0x7f060006
 			public const int tvLocation = 2131099654;
+			
+			// aapt resource value: 0x7f060001
+			public const int view_pager = 2131099649;
 			
 			static Id()
 			{

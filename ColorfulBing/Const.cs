@@ -13,6 +13,7 @@ namespace ColorfulBing {
             if (!Directory.Exists(databaseDir)) {
                 Directory.CreateDirectory(databaseDir);
             }
+
             DatabaseFile = Path.Combine(databaseDir, "local.db");
 
             SupportedResolutions = new List<Resolution> {
