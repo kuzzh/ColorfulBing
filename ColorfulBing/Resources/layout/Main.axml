@@ -17,21 +17,17 @@
         android:id="@+id/gridLayout1"
         android:orientation="horizontal"
         android:background="#50000000"
-        android:rowCount="4"
-        android:columnCount="2">
+        android:rowCount="3"
+        android:columnCount="3">
         <TextView
             android:id="@+id/tvCopyRight"
-            android:layout_columnSpan="2"
+            android:layout_columnSpan="3"
             android:textColor="#ffffff"
             android:textStyle="bold" />
         <TextView
             android:id="@+id/tvDescription"
-            android:layout_columnSpan="2"
+            android:layout_columnSpan="3"
             android:textColor="#c6cccc" />
-        <TextView
-            android:id="@+id/tvCalendar"
-            android:layout_columnSpan="2"
-            android:textColor="#ffffff" />
         <ImageView
             android:id="@+id/ivLocation"
             android:visibility="invisible"
@@ -40,6 +36,11 @@
         <TextView
             android:id="@+id/tvLocation"
             android:layout_column="1"
+            android:textColor="#ffffff" />
+        <TextView
+            android:id="@+id/tvCalendar"
+            android:layout_column="2"
+            android:layout_marginLeft="5dp"
             android:textColor="#ffffff" />
     </GridLayout>
 </FrameLayout>

@@ -75,14 +75,14 @@ namespace ColorfulBing
 			// aapt resource value: 0x7f060001
 			public const int imageView1 = 2131099649;
 			
-			// aapt resource value: 0x7f060006
-			public const int ivLocation = 2131099654;
+			// aapt resource value: 0x7f060005
+			public const int ivLocation = 2131099653;
 			
 			// aapt resource value: 0x7f060000
 			public const int logoLayout = 2131099648;
 			
-			// aapt resource value: 0x7f060005
-			public const int tvCalendar = 2131099653;
+			// aapt resource value: 0x7f060007
+			public const int tvCalendar = 2131099655;
 			
 			// aapt resource value: 0x7f060003
 			public const int tvCopyRight = 2131099651;
@@ -90,8 +90,8 @@ namespace ColorfulBing
 			// aapt resource value: 0x7f060004
 			public const int tvDescription = 2131099652;
 			
-			// aapt resource value: 0x7f060007
-			public const int tvLocation = 2131099655;
+			// aapt resource value: 0x7f060006
+			public const int tvLocation = 2131099654;
 			
 			static Id()
 			{

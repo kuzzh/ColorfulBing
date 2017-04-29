@@ -101,19 +101,22 @@ namespace ColorfulBing
                 case 0: // 保存至磁盘
                     pd.SetMessage(Resources.GetString(Resource.String.WaitDlgMsgSave));
                     pd.Show();
-                    MediaStore.Images.Media.InsertImage(ContentResolver, bitmap, mBingData.Data.Title, mBingData.Data.Description);
-                    pd.Dismiss();
+                    Task.Run(() => MediaStore.Images.Media.InsertImage(ContentResolver, bitmap, mBingData.Data.Title, mBingData.Data.Description)).ContinueWith(t => {
+                        pd.Dismiss();
 
-                    Toast.MakeText(this, "图片已保存至图库", ToastLength.Long).Show();
+                        Toast.MakeText(this, "图片已保存至图库", ToastLength.Long).Show();
+
+                    });
 
                     return true;
                 case 1: // 设置为壁纸
                     pd.SetMessage("正在设置壁纸...");
                     pd.Show();
-                    WallpaperManager.GetInstance(this).SetBitmap(bitmap);
-                    pd.Dismiss();
+                    Task.Run(() => WallpaperManager.GetInstance(this).SetBitmap(bitmap)).ContinueWith(t => {
+                        pd.Dismiss();
 
-                    Toast.MakeText(this, "壁纸设置成功", ToastLength.Long).Show();
+                        Toast.MakeText(this, "壁纸设置成功", ToastLength.Long).Show();
+                    });                    
 
                     return true;
             }
