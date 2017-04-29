@@ -125,20 +125,29 @@ namespace ColorfulBing
 			// aapt resource value: 0x7f040000
 			public const int ApplicationName = 2130968576;
 			
+			// aapt resource value: 0x7f040002
+			public const int OnLoading = 2130968578;
+			
+			// aapt resource value: 0x7f040003
+			public const int OnSaving = 2130968579;
+			
+			// aapt resource value: 0x7f040001
+			public const int PleaseWait = 2130968577;
+			
 			// aapt resource value: 0x7f040004
 			public const int SaveToDisk = 2130968580;
 			
 			// aapt resource value: 0x7f040005
-			public const int SetAsWallpaper = 2130968581;
+			public const int SaveToDiskSuccess = 2130968581;
 			
-			// aapt resource value: 0x7f040002
-			public const int WaitDlgMsg = 2130968578;
+			// aapt resource value: 0x7f040006
+			public const int SetAsWallpaper = 2130968582;
 			
-			// aapt resource value: 0x7f040003
-			public const int WaitDlgMsgSave = 2130968579;
+			// aapt resource value: 0x7f040008
+			public const int SetWallpaperSuccess = 2130968584;
 			
-			// aapt resource value: 0x7f040001
-			public const int WaitDlgTitle = 2130968577;
+			// aapt resource value: 0x7f040007
+			public const int SettingWallpaper = 2130968583;
 			
 			static String()
 			{
