@@ -16,6 +16,10 @@ namespace ColorfulBing {
 
             DatabaseFile = Path.Combine(databaseDir, "local.db");
 
+            //if (File.Exists(DatabaseFile)) {
+            //    File.Delete(DatabaseFile);
+            //}
+
             SupportedResolutions = new List<Resolution> {
                 new Resolution(240, 320),
                 new Resolution(320, 240),

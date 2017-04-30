@@ -125,6 +125,9 @@ namespace ColorfulBing
 			// aapt resource value: 0x7f040000
 			public const int ApplicationName = 2130968576;
 			
+			// aapt resource value: 0x7f040009
+			public const int GoToToday = 2130968585;
+			
 			// aapt resource value: 0x7f040002
 			public const int OnLoading = 2130968578;
 			

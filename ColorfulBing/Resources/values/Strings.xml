@@ -9,4 +9,5 @@
   <string name="SetAsWallpaper">设置为壁纸</string>
   <string name="SettingWallpaper">正在设置壁纸...</string>
   <string name="SetWallpaperSuccess">壁纸设置成功</string>
+  <string name="GoToToday">转到今天</string>
 </resources>

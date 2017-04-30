@@ -3,18 +3,10 @@ using Android.App;
 using Android.Views;
 using Android.Widget;
 using Android.OS;
-using Android.Graphics;
-using System.Net;
-using System.IO;
-using Newtonsoft.Json;
 using System.Threading.Tasks;
 using System.Collections.Generic;
-using Android.Graphics.Drawables;
 using Android.Provider;
 using ColorfulBing.Model;
-using Android.Views.Animations;
-using static Android.Widget.ViewSwitcher;
-using static Android.Views.ViewGroup;
 using Android.Support.V4.View;
 
 namespace ColorfulBing {
@@ -29,8 +21,6 @@ namespace ColorfulBing {
 
             var viewPager = FindViewById<ViewPager>(Resource.Id.view_pager);
             viewPager.Adapter = new ImagePagerAdapter(this);
-
-            RegisterForContextMenu(viewPager);
         }
 
         public void UpdateData(BData bdata) {
@@ -49,10 +39,10 @@ namespace ColorfulBing {
         }
         
         public override void OnCreateContextMenu(IContextMenu menu, View v, IContextMenuContextMenuInfo menuInfo) {
-            //menu.SetHeaderTitle("Edit");
             var menuItems = new List<String> {
                 Resources.GetString(Resource.String.SaveToDisk),
-                Resources.GetString(Resource.String.SetAsWallpaper)
+                Resources.GetString(Resource.String.SetAsWallpaper),
+                Resources.GetString(Resource.String.GoToToday)
             };
             for (int i = 0; i < menuItems.Count; i++) {
                 menu.Add(Menu.None, i, i, menuItems[i]);
@@ -63,7 +53,6 @@ namespace ColorfulBing {
         public override bool OnContextItemSelected(IMenuItem item) {
             base.OnContextItemSelected(item);
 
-            //var bitmap = ((BitmapDrawable)mImageView.Drawable).Bitmap;
             var viewPager = FindViewById<ViewPager>(Resource.Id.view_pager);
             var imagePagerAdapter = (ImagePagerAdapter)viewPager.Adapter;
             var bdata = imagePagerAdapter.CurBData;
@@ -93,6 +82,9 @@ namespace ColorfulBing {
                         Toast.MakeText(this, Resource.String.SetWallpaperSuccess, ToastLength.Long).Show();
                     });                    
 
+                    return true;
+                case 2: // 转到今天
+                    viewPager.SetCurrentItem(0, true);
                     return true;
             }
             return false;

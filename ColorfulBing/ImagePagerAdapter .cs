@@ -16,14 +16,20 @@ namespace ColorfulBing {
         private const int MinCount = 10;
         private readonly MainActivity mMainActivity;
 
+        private bool mFirstFetchData = true;
+        private readonly ProgressDialog mProgressDialog;
+
         private BData mCurBData;
         private int mCurPos = -1;
         private DateTime mCurDate = DateTime.Today;
 
-        public BData CurBData;
+        public BData CurBData { get { return mCurBData; } }
 
         public ImagePagerAdapter(MainActivity activity) {
             mMainActivity = activity;
+
+            mProgressDialog = new ProgressDialog(activity);
+            mProgressDialog.SetProgressStyle(ProgressDialogStyle.Spinner);
         }
 
         public override int Count {
@@ -45,27 +51,34 @@ namespace ColorfulBing {
             var imageView = new ImageView(mMainActivity);
             imageView.SetScaleType(ImageView.ScaleType.FitXy);
 
+            mMainActivity.RegisterForContextMenu(imageView);
+
             var dt = mCurDate.Subtract(new TimeSpan(position, 0, 0, 0));
 
-            var pd = new ProgressDialog(mMainActivity);
-            pd.SetProgressStyle(ProgressDialogStyle.Spinner);
-            pd.SetTitle(Resource.String.PleaseWait);
-            pd.SetMessage(mMainActivity.Resources.GetString(Resource.String.OnLoading));
-            pd.Show();
+            if (mFirstFetchData) {
+                mProgressDialog.SetProgressStyle(ProgressDialogStyle.Spinner);
+                mProgressDialog.SetTitle(Resource.String.PleaseWait);
+                mProgressDialog.SetMessage(mMainActivity.Resources.GetString(Resource.String.OnLoading));
+                mProgressDialog.Show();
+            }
+
             Task.Run(() => {
                 try {
                     var bdata = GetBDataAsync(dt, position).Result;
                     mMainActivity.RunOnUiThread(() => {
                         imageView.SetImageBitmap(bdata.Bitmap);
                         ((ViewPager)container).AddView(imageView);
-                        pd.Dismiss();
+
+                        if (mFirstFetchData) {
+                            mProgressDialog.Dismiss();
+
+                            mFirstFetchData = false;
+                        }
                     });
                 } catch (System.Exception ex) {
                     Toast.MakeText(mMainActivity, ex.Message, ToastLength.Long).Show();
                 }
             });
-
-
 
             return imageView;
         }
@@ -99,9 +112,18 @@ namespace ColorfulBing {
             if (bdata != null) {
                 return bdata;
             }
+
+            mMainActivity.RunOnUiThread(() => {
+                mProgressDialog.SetTitle(Resource.String.PleaseWait);
+                mProgressDialog.SetMessage(mMainActivity.Resources.GetString(Resource.String.OnLoading));
+                mProgressDialog.Show();
+            });
+
             bdata = await GetBDataFromRemoteAsync(d);
 
             SQLiteHelper.InsertBDataAsync(bdata);
+
+            mMainActivity.RunOnUiThread(() => mProgressDialog.Dismiss());
 
             return bdata;
         }
@@ -115,6 +137,10 @@ namespace ColorfulBing {
             var res = Utils.GetSuitableResolution(screenWidth, screenHeight);
             var imageUrl = System.String.Format("https://bing.ioliu.cn/v1?w={0}&h={1}&d={2}", res.Width, res.Height, d);
             var bitmap = await GetBitmapAsync(imageUrl);
+
+            if (bitmap.Width != screenWidth || bitmap.Height != screenHeight) {
+                bitmap = BitmapUtil.ZoomBitmap(bitmap, screenWidth, screenHeight);
+            }
 
             var jsonString = await GetJsonDataAsync(System.String.Format("https://bing.ioliu.cn/v1?d={0}", d));
             var JBData = JsonConvert.DeserializeObject<JBData>(jsonString);
