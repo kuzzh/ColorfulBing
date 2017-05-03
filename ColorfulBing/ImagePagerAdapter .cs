@@ -10,6 +10,8 @@ using System.Net;
 using System.IO;
 using Android.Graphics;
 using Newtonsoft.Json;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace ColorfulBing {
     public sealed class ImagePagerAdapter : PagerAdapter {
@@ -22,6 +24,8 @@ namespace ColorfulBing {
         private BData mCurBData;
         private int mCurPos = -1;
         private DateTime mCurDate = DateTime.Today;
+
+        private readonly List<CacheItem> mBDataCache = new List<CacheItem>();
 
         public BData CurBData { get { return mCurBData; } }
 
@@ -108,8 +112,14 @@ namespace ColorfulBing {
         }
 
         private async Task<BData> GetBDataAsync(DateTime dt, int d) {
+            var cacheItem = mBDataCache.FirstOrDefault(data => data.BData.Calendar.Date.Equals(dt.Date));
+            if (cacheItem != null) {
+                cacheItem.LastAccessedTime = DateTime.Now;
+                return cacheItem.BData;
+            }
             var bdata = await SQLiteHelper.GetBDataAsync(dt);
             if (bdata != null) {
+                mBDataCache.Add(new CacheItem(bdata));
                 return bdata;
             }
 
@@ -122,6 +132,8 @@ namespace ColorfulBing {
             bdata = await GetBDataFromRemoteAsync(d);
 
             SQLiteHelper.InsertBDataAsync(bdata);
+
+            mBDataCache.Add(new CacheItem(bdata));
 
             mMainActivity.RunOnUiThread(() => mProgressDialog.Dismiss());
 
