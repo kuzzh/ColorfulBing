@@ -4,6 +4,11 @@
 
 ## 修改历史
 
+### 2017年5月20日
+修复了两个问题：
+1. 设置 ProgressDialog 的 SetCanceledOnTouchOutside 为 false ，防止在屏幕上点击的时候 ProgressDialog  消失
+2. 修复了 ImagePagerAdapter 中 Count 的获取 BUG
+
 ### 2017年5月3日
 1. 增加了一个简单的内存缓存列表，没有做缓存列表长度限制 
 
