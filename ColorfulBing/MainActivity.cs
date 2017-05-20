@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using Android.Provider;
 using ColorfulBing.Model;
 using Android.Support.V4.View;
+using Android.Runtime;
 
 namespace ColorfulBing {
     [Activity(Label = "@string/ApplicationName", MainLauncher = true, Icon = "@drawable/bing")]
@@ -20,7 +21,40 @@ namespace ColorfulBing {
             SetContentView(Resource.Layout.Main);
 
             var viewPager = FindViewById<ViewPager>(Resource.Id.view_pager);
-            viewPager.Adapter = new ImagePagerAdapter(this);
+            if (null == viewPager.Adapter) {
+                viewPager.Adapter = new ImagePagerAdapter(this);
+            }
+
+            AndroidEnvironment.UnhandledExceptionRaiser += UnhandledExceptionHandler;
+            AppDomain.CurrentDomain.UnhandledException += CurrentDomainOnUnhandledException;
+            TaskScheduler.UnobservedTaskException += TaskSchedulerOnUnobservedTaskException;
+        }
+
+        protected override void Dispose(bool disposing) {
+            AndroidEnvironment.UnhandledExceptionRaiser -= UnhandledExceptionHandler;
+            AppDomain.CurrentDomain.UnhandledException -= CurrentDomainOnUnhandledException;
+            TaskScheduler.UnobservedTaskException -= TaskSchedulerOnUnobservedTaskException;
+
+            base.Dispose(disposing);
+        }
+
+        private void TaskSchedulerOnUnobservedTaskException(object sender,
+            UnobservedTaskExceptionEventArgs unobservedTaskExceptionEventArgs) {
+            var ex = unobservedTaskExceptionEventArgs.Exception;
+            LogUtil.WriteLogAsync(ex).Wait();
+            Toast.MakeText(this, ex.Message, ToastLength.Long).Show();
+        }
+
+        private void CurrentDomainOnUnhandledException(object sender,
+            UnhandledExceptionEventArgs unhandledExceptionEventArgs) {
+            var ex = unhandledExceptionEventArgs.ExceptionObject as Exception;
+            LogUtil.WriteLogAsync(ex).Wait();
+            Toast.MakeText(this, ex.Message, ToastLength.Long).Show();
+        }
+
+        private void UnhandledExceptionHandler(object sender, RaiseThrowableEventArgs e) {
+            LogUtil.WriteLogAsync(e.Exception).Wait();
+            Toast.MakeText(this, e.Exception.Message, ToastLength.Long).Show();
         }
 
         public void UpdateData(BData bdata) {
@@ -59,6 +93,7 @@ namespace ColorfulBing {
             var bitmap = bdata.Bitmap;
             var pd = new ProgressDialog(this);
             pd.SetProgressStyle(ProgressDialogStyle.Spinner);
+            pd.SetCanceledOnTouchOutside(false);
             pd.SetTitle(Resources.GetString(Resource.String.PleaseWait));
 
             switch (item.ItemId) {

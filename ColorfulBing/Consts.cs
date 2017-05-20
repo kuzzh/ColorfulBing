@@ -3,21 +3,27 @@ using System.Collections.Generic;
 using System.IO;
 
 namespace ColorfulBing {
-    internal static class Const {
-        internal static string DatabaseFile;
+    internal static class Consts {
+        internal static string DBFile;
+        internal static string LogFile;
         internal static List<Resolution> SupportedResolutions;
-        static Const() {
+        static Consts() {
             var documents = Android.OS.Environment.GetExternalStoragePublicDirectory(Android.OS.Environment.DirectoryDocuments);
 
-            var databaseDir = Path.Combine(documents.AbsolutePath, "ColorfulBing");
-            if (!Directory.Exists(databaseDir)) {
-                Directory.CreateDirectory(databaseDir);
+            var rootDir = Path.Combine(documents.AbsolutePath, "ColorfulBing");
+            if (!Directory.Exists(rootDir)) {
+                Directory.CreateDirectory(rootDir);
             }
 
-            DatabaseFile = Path.Combine(databaseDir, "local.db");
+            DBFile = Path.Combine(rootDir, "local.db");
 
-            //if (File.Exists(DatabaseFile)) {
-            //    File.Delete(DatabaseFile);
+            LogFile = Path.Combine(rootDir, "log.txt");
+            if (!File.Exists(LogFile)) {
+                File.Create(LogFile);
+            }
+
+            //if (File.Exists(DBFile)) {
+            //    File.Delete(DBFile);
             //}
 
             SupportedResolutions = new List<Resolution> {

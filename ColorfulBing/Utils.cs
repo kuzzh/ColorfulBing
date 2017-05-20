@@ -3,7 +3,7 @@
 namespace ColorfulBing {
     public static class Utils {
         public static Resolution GetSuitableResolution(int w, int h) {
-            foreach (var res in Const.SupportedResolutions) {
+            foreach (var res in Consts.SupportedResolutions) {
                 if (res.Width >= w && res.Height >= h) {
                     return res;
                 }

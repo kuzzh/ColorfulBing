@@ -8,7 +8,7 @@ using Android.Content.Res;
 namespace ColorfulBing {
     public static class BitmapUtil {
         public static async Task<Bitmap> GetBitmapAsync(byte[] buffer) {
-            return await BitmapFactory.DecodeByteArrayAsync(buffer, 0, buffer.Length);
+            return await BitmapFactory.DecodeByteArrayAsync(buffer, 0, buffer.Length).ConfigureAwait(false);
         }
 
         public static async Task<byte[]> GetBitmapBufferAsync(Bitmap bitmap) {

@@ -114,9 +114,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BitmapUtil.cs" />
-    <Compile Include="Const.cs" />
+    <Compile Include="Consts.cs" />
     <Compile Include="DateUtil.cs" />
     <Compile Include="ImagePagerAdapter .cs" />
+    <Compile Include="LogUtil.cs" />
     <Compile Include="Model\BData.cs" />
     <Compile Include="Model\CacheItem.cs" />
     <Compile Include="Model\JBData.cs" />

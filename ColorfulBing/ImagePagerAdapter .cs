@@ -21,6 +21,7 @@ namespace ColorfulBing {
         private bool mFirstFetchData = true;
         private readonly ProgressDialog mProgressDialog;
 
+        private int mCount;
         private BData mCurBData;
         private int mCurPos = -1;
         private DateTime mCurDate = DateTime.Today;
@@ -34,15 +35,19 @@ namespace ColorfulBing {
 
             mProgressDialog = new ProgressDialog(activity);
             mProgressDialog.SetProgressStyle(ProgressDialogStyle.Spinner);
+            mProgressDialog.SetCanceledOnTouchOutside(false);
         }
 
         public override int Count {
             get {
-                var count = SQLiteHelper.GetCount();
-                if (count < MinCount) {
-                    return MinCount;
+                if (mCount <= 0) {
+                    mCount = Math.Max(SQLiteHelper.GetCount(), MinCount);
+                    var bdata = SQLiteHelper.GetBDataAsync(DateTime.Today).Result;
+                    if (null == bdata) { // 当天的壁纸还未存入数据库
+                        mCount += 1;
+                    }
                 }
-                return count;
+                return mCount;
             }
         }
 
@@ -79,7 +84,8 @@ namespace ColorfulBing {
                             mFirstFetchData = false;
                         }
                     });
-                } catch (System.Exception ex) {
+                } catch (Exception ex) {
+                    LogUtil.WriteLogAsync(ex).Wait();
                     Toast.MakeText(mMainActivity, ex.Message, ToastLength.Long).Show();
                 }
             });
@@ -106,6 +112,7 @@ namespace ColorfulBing {
                         mCurPos = viewPager.CurrentItem;
                     });
                 } catch (System.Exception ex) {
+                    LogUtil.WriteLogAsync(ex).Wait();
                     Toast.MakeText(mMainActivity, ex.Message, ToastLength.Long).Show();
                 }
             });
@@ -194,18 +201,13 @@ namespace ColorfulBing {
         }
 
         private async Task<Bitmap> GetBitmapAsync(string url) {
-            try {
-                var webRequest = WebRequest.CreateHttp(url);
-                webRequest.UserAgent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/51.0.2704.79 Safari/537.36 Edge/14.14393";
+            var webRequest = WebRequest.CreateHttp(url);
+            webRequest.UserAgent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/51.0.2704.79 Safari/537.36 Edge/14.14393";
 
-                var response = await webRequest.GetResponseAsync();
-                var stream = response.GetResponseStream();
-                var bitmap = await BitmapFactory.DecodeStreamAsync(stream);
-                return bitmap;
-            } catch (System.Exception ex) {
-                Toast.MakeText(mMainActivity, ex.Message, ToastLength.Long).Show();
-                return null;
-            }
+            var response = await webRequest.GetResponseAsync();
+            var stream = response.GetResponseStream();
+            var bitmap = await BitmapFactory.DecodeStreamAsync(stream);
+            return bitmap;
         }
     }
 }
