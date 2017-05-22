@@ -4,6 +4,9 @@
 
 ## 修改历史
 
+### 2017年5月23日
+使用原生BING接口替换https://bing.ioliu.cn
+
 ### 2017年5月20日
 修复了两个问题：
 1. 设置 ProgressDialog 的 SetCanceledOnTouchOutside 为 false ，防止在屏幕上点击的时候 ProgressDialog  消失
