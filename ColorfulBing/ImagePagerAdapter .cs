@@ -157,13 +157,13 @@ namespace ColorfulBing {
             var res = Utils.GetSuitableResolution(screenWidth, screenHeight);
             var bData = new BData();
 
-            var html = await GetHtmlDataAsync(Consts.LifeUrl);
+            var html = await GetHtmlDataAsync(string.Format(Consts.BingLifeUrl, DateTime.Today.Subtract(new TimeSpan(d, 0, 0, 0)).ToString("yyyyMMdd")));
 
             bData.Title = ExtractText(html, "<div class=\"hplaTtl\">(.*?)</div>");
             bData.Location = ExtractText(html, "<span class=\"hplaAttr\">(.*?)</span");
             bData.Description = ExtractText(html, "<div id=\"hplaSnippet\">(.*?)</div>");
 
-            var json = await GetHtmlDataAsync(string.Format(Consts.HPImageArchiveUrl, d, DateUtil.ConvertFromLocalDateTimeToSeconds(DateTime.Now)));
+            var json = await GetHtmlDataAsync(string.Format(Consts.BingHPImageArchiveUrl, d, DateUtil.ConvertFromLocalDateTimeToSeconds(DateTime.Now)));
             var JBData = JsonConvert.DeserializeObject<JBData>(json);
 
             bData.Copyright = JBData.Images[0].Copyright;
