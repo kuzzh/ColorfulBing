@@ -9,6 +9,7 @@ using Android.Provider;
 using ColorfulBing.Model;
 using Android.Support.V4.View;
 using Android.Runtime;
+using System.IO;
 
 namespace ColorfulBing {
     [Activity(Label = "@string/ApplicationName", MainLauncher = true, Icon = "@drawable/bing")]

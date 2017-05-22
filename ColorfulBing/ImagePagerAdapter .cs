@@ -12,6 +12,7 @@ using Android.Graphics;
 using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 
 namespace ColorfulBing {
     public sealed class ImagePagerAdapter : PagerAdapter {
@@ -154,43 +155,45 @@ namespace ColorfulBing {
             var screenHeight = size.Y;      // 屏幕高（像素，如：1184px）  
 
             var res = Utils.GetSuitableResolution(screenWidth, screenHeight);
-            var imageUrl = System.String.Format("https://bing.ioliu.cn/v1?w={0}&h={1}&d={2}", res.Width, res.Height, d);
-            var bitmap = await GetBitmapAsync(imageUrl);
+            var bData = new BData();
 
-            if (bitmap.Width != screenWidth || bitmap.Height != screenHeight) {
-                bitmap = BitmapUtil.ZoomBitmap(bitmap, screenWidth, screenHeight);
+            var html = await GetHtmlDataAsync(Consts.LifeUrl);
+
+            bData.Title = ExtractText(html, "<div class=\"hplaTtl\">(.*?)</div>");
+            bData.Location = ExtractText(html, "<span class=\"hplaAttr\">(.*?)</span");
+            bData.Description = ExtractText(html, "<div id=\"hplaSnippet\">(.*?)</div>");
+
+            var json = await GetHtmlDataAsync(string.Format(Consts.HPImageArchiveUrl, d, DateUtil.ConvertFromLocalDateTimeToSeconds(DateTime.Now)));
+            var JBData = JsonConvert.DeserializeObject<JBData>(json);
+
+            bData.Copyright = JBData.Images[0].Copyright;
+            bData.ImageUrl = Consts.BingBaseUrl + JBData.Images[0].Urlbase + "_" + res.Width + "x" + res.Height + ".jpg";
+
+            bData.Bitmap = await GetBitmapAsync(bData.ImageUrl);
+
+            if (bData.Bitmap.Width != screenWidth || bData.Bitmap.Height != screenHeight) {
+                bData.Bitmap = BitmapUtil.ZoomBitmap(bData.Bitmap, screenWidth, screenHeight);
             }
 
-            var jsonString = await GetJsonDataAsync(System.String.Format("https://bing.ioliu.cn/v1?d={0}", d));
-            var JBData = JsonConvert.DeserializeObject<JBData>(jsonString);
+            bData.Calendar = FormatCalendar(JBData);
 
-            return new BData {
-                Id = Guid.NewGuid().ToString(),
-                Title = JBData.Data.Title,
-                Description = JBData.Data.Description,
-                Copyright = JBData.Data.Copyright,
-                Location = FormatLocation(JBData),
-                Calendar = FormatCalendar(JBData),
-                Bitmap = bitmap
-            };
+            return bData;
+        }
+
+        private string ExtractText(string html, string pattern) {
+            var regex = new Regex(pattern);
+            if (regex.IsMatch(html)) {
+                return regex.Match(html).Groups[1].Value;
+            }
+            return "";
         }
 
         private DateTime FormatCalendar(JBData jbdata) {
-            var dtStr = string.Format("{0}-{1}-{2}", jbdata.Data.EndDate.Substring(0, 4), jbdata.Data.EndDate.Substring(4, 2), jbdata.Data.EndDate.Substring(6, 2));
+            var dtStr = string.Format("{0}-{1}-{2}", jbdata.Images[0].EndDate.Substring(0, 4), jbdata.Images[0].EndDate.Substring(4, 2), jbdata.Images[0].EndDate.Substring(6, 2));
             return DateTime.Parse(dtStr);
         }
 
-        private string FormatLocation(JBData jbdata) {
-            var location = jbdata.Data.Continent;
-            if (!string.IsNullOrEmpty(jbdata.Data.Country)) {
-                location += "，" + jbdata.Data.Country;
-            }
-            if (!string.IsNullOrEmpty(jbdata.Data.City)) {
-                location += "，" + jbdata.Data.City;
-            }
-            return location;
-        }
-        private async Task<string> GetJsonDataAsync(string url) {
+        private async Task<string> GetHtmlDataAsync(string url) {
             var webRequest = WebRequest.CreateHttp(url);
             webRequest.UserAgent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/51.0.2704.79 Safari/537.36 Edge/14.14393";
 

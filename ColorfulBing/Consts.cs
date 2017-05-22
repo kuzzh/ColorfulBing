@@ -7,6 +7,10 @@ namespace ColorfulBing {
         internal static string DBFile;
         internal static string LogFile;
         internal static List<Resolution> SupportedResolutions;
+        internal const string BingBaseUrl = "http://cn.bing.com";
+        internal const string LifeUrl = "http://cn.bing.com/cnhp/life";
+        internal const string HPImageArchiveUrl = "http://cn.bing.com/HPImageArchive.aspx?format=js&idx={0}&n=1&nc={1}&pid=hp";
+
         static Consts() {
             var documents = Android.OS.Environment.GetExternalStoragePublicDirectory(Android.OS.Environment.DirectoryDocuments);
 
@@ -21,10 +25,6 @@ namespace ColorfulBing {
             if (!File.Exists(LogFile)) {
                 File.Create(LogFile);
             }
-
-            //if (File.Exists(DBFile)) {
-            //    File.Delete(DBFile);
-            //}
 
             SupportedResolutions = new List<Resolution> {
                 new Resolution(240, 320),

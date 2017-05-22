@@ -1,41 +1,40 @@
 ﻿
+using Newtonsoft.Json;
+
 namespace ColorfulBing.Model {
-    public class JBData {
-        public Data Data { get; set; }
-        public Status Status { get; set; }
+
+    public sealed class JBData {
+        [JsonProperty("images")]
+        public JImage[] Images { get; set; }
     }
 
-    public class Data {
-        public int Id { get; set; }
-        public string Title { get; set; }
-        public string Attribute { get; set; }
-        public string Description { get; set; }
-        public string Copyright { get; set; }
-        public string Copyrightlink { get; set; }
-        public string Startdate { get; set; }
+
+    public sealed class JImage {
+        [JsonProperty("startdate")]
+        public string StartDate { get; set; }
+        [JsonProperty("fullstartdate")]
+        public string FullStartDate { get; set; }
+        [JsonProperty("enddate")]
         public string EndDate { get; set; }
-        public string Fullstartdate { get; set; }
+        [JsonProperty("url")]
         public string Url { get; set; }
+        [JsonProperty("urlbase")]
         public string Urlbase { get; set; }
+        [JsonProperty("copyright")]
+        public string Copyright { get; set; }
+        [JsonProperty("copyrightlink")]
+        public string Copyrightlink { get; set; }
+        [JsonProperty("quiz")]
+        public string Quiz { get; set; }
+        [JsonProperty("wp")]
+        public bool WP { get; set; }
+        [JsonProperty("hsh")]
         public string Hsh { get; set; }
-        public string Qiniu_url { get; set; }
-        public string Longitude { get; set; }
-        public string Latitude { get; set; }
-        public string City { get; set; }
-        public string Country { get; set; }
-        public string Continent { get; set; }
-        public string Thumbnail_pic { get; set; }
-        public string Bmiddle_pic { get; set; }
-        public string Original_pic { get; set; }
-        public int Weibo { get; set; }
-        public int Likes { get; set; }
-        public int Views { get; set; }
-        public int Downloads { get; set; }
+        [JsonProperty("drk")]
+        public int Drk { get; set; }
+        [JsonProperty("top")]
+        public int Top { get; set; }
+        [JsonProperty("bot")]
+        public int Bot { get; set; }
     }
-
-    public class Status {
-        public int Code { get; set; }
-        public string Message { get; set; }
-    }
-
 }

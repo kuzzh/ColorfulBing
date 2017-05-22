@@ -2,16 +2,21 @@
 using Mono.Data.Sqlite;
 using ColorfulBing.Model;
 using System.Threading.Tasks;
+using System.IO;
 
 namespace ColorfulBing {
     public static class SQLiteHelper {
         public static string ConnectionString = String.Format("Data Source={0}", Consts.DBFile);
         public const string BDataTableName = "BDataTable";
 
-        private static string CreateBDataTableSql = String.Format("CREATE TABLE IF NOT EXISTS {0} (ID VARCHAR(40) PRIMARY KEY NOT NULL,TITLE VARCHAR(100)," +
+        private static string CreateBDataTableSql = String.Format("CREATE TABLE IF NOT EXISTS {0} (ID INTEGER PRIMARY KEY AUTOINCREMENT,TITLE VARCHAR(100)," +
             "COPYRIGHT VARCHAR(200),DESCRIPTION VARHCAR(500),LOCATION VARCHAR(100),BITMAP BLOB, CALENDAR INTEGER)", BDataTableName);
 
         static SQLiteHelper() {
+            //if (File.Exists(Consts.DBFile)) {
+            //    File.Delete(Consts.DBFile);
+            //}
+
             CreateTableIfNotExist();
         }
 
@@ -45,7 +50,6 @@ namespace ColorfulBing {
                     using (var dr = await command.ExecuteReaderAsync().ConfigureAwait(false)) {
                         if (dr.Read()) {
                             return new BData {
-                                Id = dr["Id"].ToString(),
                                 Title = dr["Title"].ToString(),
                                 Copyright = dr["Copyright"].ToString(),
                                 Description = dr["Description"].ToString(),
@@ -68,9 +72,9 @@ namespace ColorfulBing {
             using (var conn = GetConnection()) {
                 using (var command = new SqliteCommand(conn)) {
                     command.CommandType = System.Data.CommandType.Text;
-                    command.CommandText = String.Format("INSERT INTO {0} VALUES(:Id,:Title,:Copyright,:Description,:Location,:Bitmap,:Calendar)", BDataTableName);
+                    command.CommandText = String.Format("INSERT INTO {0} (TITLE,COPYRIGHT,DESCRIPTION,LOCATION,BITMAP,CALENDAR)" +
+                        " VALUES(:Title,:Copyright,:Description,:Location,:Bitmap,:Calendar)", BDataTableName);
 
-                    command.Parameters.Add(new SqliteParameter("Id", bdata.Id));
                     command.Parameters.Add(new SqliteParameter("Title", bdata.Title));
                     command.Parameters.Add(new SqliteParameter("Copyright", bdata.Copyright));
                     command.Parameters.Add(new SqliteParameter("Description", bdata.Description));
